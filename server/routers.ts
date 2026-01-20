@@ -136,7 +136,7 @@ const employeeProcedure = tenantProcedure.use(({ ctx, next }) => {
 
 // Middleware for platform owner (SaaS admin)
 const platformAdminProcedure = protectedProcedure.use(({ ctx, next }) => {
-  if (ctx.user.openId !== ENV.ownerOpenId) {
+  if (!ctx.user.isPlatformAdmin) {
     throw new TRPCError({
       code: "FORBIDDEN",
       message: "Platform admin access required",

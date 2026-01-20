@@ -85,7 +85,8 @@ export default function Login() {
         return;
       }
 
-      setLocation("/dashboard");
+      const isPlatformAdmin = Boolean(data?.user?.isPlatformAdmin);
+      setLocation(isPlatformAdmin ? "/saas-admin/dashboard" : "/dashboard");
     } catch (err) {
       console.error("Login error:", err);
       setError(t("auth.errors.networkError"));
@@ -235,7 +236,7 @@ export default function Login() {
               </div>
             </div>
 
-            <Link href="/saas-admin">
+            <Link href="/saas-admin/login">
               <Button
                 variant="ghost"
                 className="w-full text-slate-500 hover:text-slate-700 hover:bg-slate-100"

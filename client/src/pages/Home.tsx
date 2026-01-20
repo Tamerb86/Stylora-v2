@@ -54,7 +54,7 @@ import { isTenantSubdomain } from "@/utils/tenantDetection";
 
 export default function Home() {
   const { user } = useAuth();
-  const isOwner = user?.openId === import.meta.env.VITE_OWNER_OPEN_ID;
+  const isPlatformAdmin = Boolean(user?.isPlatformAdmin);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [, setLocation] = useLocation();
 
@@ -457,8 +457,8 @@ export default function Home() {
                     Kundehistorier
                   </a>
                 </Link>
-                {isOwner && (
-                  <Link href="/saas-admin">
+                {isPlatformAdmin && (
+                  <Link href="/saas-admin/dashboard">
                     <a className="text-gray-700 hover:text-purple-600 transition-colors font-medium flex items-center gap-1">
                       <Shield className="w-4 h-4" />
                       SaaS Admin
@@ -537,8 +537,8 @@ export default function Home() {
                     Kundehistorier
                   </a>
                 </Link>
-                {isOwner && (
-                  <Link href="/saas-admin">
+                {isPlatformAdmin && (
+                  <Link href="/saas-admin/dashboard">
                     <a className="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-colors font-medium flex items-center gap-2">
                       <Shield className="w-4 h-4" />
                       SaaS Admin

@@ -445,11 +445,20 @@ export default function DashboardLayout({
     return saved ? parseInt(saved, 10) : DEFAULT_WIDTH;
   });
   const { loading, user } = useAuth();
+  const [, setLocation] = useLocation();
   const { isSimpleMode, toggleMode } = useUIMode();
+  const shouldRedirectToPlatform =
+    Boolean(user?.isPlatformAdmin) && !user?.isImpersonating;
 
   useEffect(() => {
     localStorage.setItem(SIDEBAR_WIDTH_KEY, sidebarWidth.toString());
   }, [sidebarWidth]);
+
+  useEffect(() => {
+    if (shouldRedirectToPlatform) {
+      setLocation("/saas-admin/dashboard");
+    }
+  }, [setLocation, shouldRedirectToPlatform]);
 
   if (loading) {
     return <DashboardLayoutSkeleton />;
@@ -477,6 +486,16 @@ export default function DashboardLayout({
           >
             Logg inn
           </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (shouldRedirectToPlatform) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-sm text-muted-foreground">
+          Sender deg til plattformadministrasjonen...
         </div>
       </div>
     );
@@ -1235,9 +1254,9 @@ function DashboardLayoutContent({
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
-                {user?.tenantId === "platform-admin-tenant" && (
+                {user?.isPlatformAdmin && (
                   <DropdownMenuItem
-                    onClick={() => setLocation("/saas-admin")}
+                    onClick={() => setLocation("/saas-admin/dashboard")}
                     className="cursor-pointer"
                   >
                     <Shield className="mr-2 h-4 w-4" />

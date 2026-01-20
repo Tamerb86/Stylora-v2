@@ -1,6 +1,6 @@
 import type { CreateExpressContextOptions } from "@trpc/server/adapters/express";
 import type { User } from "../../drizzle/schema";
-import { authService } from "./auth-simple";
+import { authService, type TenantContextType } from "./auth-simple";
 import { getDb } from "../db";
 import { users } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
@@ -8,12 +8,16 @@ import { eq } from "drizzle-orm";
 export type UserWithImpersonation = User & {
   impersonatedTenantId?: string | null;
   isImpersonating?: boolean;
+  tenantSubdomain?: string | null;
+  tenantContext?: TenantContextType;
+  isPlatformAdmin?: boolean;
 };
 
 export type TrpcContext = {
   req: CreateExpressContextOptions["req"];
   res: CreateExpressContextOptions["res"];
   user: UserWithImpersonation | null;
+  tenantContext?: TenantContextType;
 };
 
 export async function createContext(
@@ -54,5 +58,6 @@ export async function createContext(
     req: opts.req,
     res: opts.res,
     user: user ? { ...user, impersonatedTenantId, isImpersonating } : null,
+    tenantContext: user?.tenantContext,
   };
 }

@@ -40,6 +40,14 @@ describe("tenantDetection", () => {
       expect(getTenantFromHostname()).toBeNull();
     });
 
+    it("should return null for platform subdomain", () => {
+      (window.location as any) = {
+        hostname: "platform.stylora.no",
+        search: "",
+      };
+      expect(getTenantFromHostname()).toBeNull();
+    });
+
     it("should return null for root domain", () => {
       (window.location as any) = {
         hostname: "stylora.no",

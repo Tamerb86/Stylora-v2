@@ -24,6 +24,8 @@ export type SessionPayload = {
   impersonatedTenantId?: string | null;
 };
 
+type TenantContextType = "PLATFORM" | "TENANT";
+
 const SALT_ROUNDS = 10;
 
 /**
@@ -145,16 +147,25 @@ class SupabaseAuthService {
     const signedInAt = new Date();
     let user = await db.getUserByOpenId(sessionUserId);
 
-    // Handle impersonation: if platform owner is impersonating a tenant
-    if (session.impersonatedTenantId && session.openId === ENV.ownerOpenId) {
-      if (user) {
-        user = { ...user, tenantId: session.impersonatedTenantId };
-      }
-    }
-
     if (!user) {
       console.warn("[Auth] User not found in database");
       return null;
+    }
+
+    const baseTenantId = user.tenantId;
+    const baseTenant = baseTenantId
+      ? await db.getTenantById(baseTenantId)
+      : null;
+    const isPlatformAdmin =
+      user.role === "owner" && baseTenant?.subdomain === "platform";
+    let effectiveTenantId = baseTenantId;
+    let tenantSubdomain = baseTenant?.subdomain ?? null;
+
+    if (session.impersonatedTenantId && isPlatformAdmin) {
+      effectiveTenantId = session.impersonatedTenantId;
+      const effectiveTenant = await db.getTenantById(effectiveTenantId);
+      tenantSubdomain = effectiveTenant?.subdomain ?? tenantSubdomain;
+      user = { ...user, tenantId: effectiveTenantId };
     }
 
     // Update last signed in
@@ -166,7 +177,12 @@ class SupabaseAuthService {
     });
 
     return {
-      user,
+      user: {
+        ...user,
+        tenantSubdomain,
+        tenantContext: (isPlatformAdmin ? "PLATFORM" : "TENANT") as TenantContextType,
+        isPlatformAdmin,
+      },
       impersonatedTenantId: session.impersonatedTenantId ?? null,
     };
   }

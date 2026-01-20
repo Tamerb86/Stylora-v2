@@ -20,7 +20,7 @@ function isValidTenantId(tenantId: string): boolean {
  * Extract tenant slug from hostname
  * Returns null if:
  * - No subdomain exists (e.g., stylora.no)
- * - Subdomain is 'www' (main site)
+ * - Subdomain is 'www' or 'platform' (main site)
  * - Running in localhost/development without tenantId param
  * 
  * @returns tenant slug or null
@@ -67,9 +67,9 @@ export function getTenantFromHostname(): string | null {
   if (parts.length >= 3) {
     const subdomain = parts[0];
     
-    // Exclude 'www' subdomain (main marketing site)
-    if (subdomain === "www") {
-      console.log("[TenantDetection] WWW subdomain - no tenant");
+    // Exclude 'www' and platform subdomains (main marketing site)
+    if (subdomain === "www" || subdomain === "platform") {
+      console.log("[TenantDetection] Reserved subdomain - no tenant");
       return null;
     }
     

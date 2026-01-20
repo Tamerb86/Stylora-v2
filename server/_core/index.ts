@@ -5,7 +5,7 @@ import net from "net";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { rateLimit } from "express-rate-limit";
 import helmet from "helmet";
-import { registerAuthRoutes } from "./auth-simple";
+import { authService, registerAuthRoutes } from "./auth-simple";
 import { registerRefreshEndpoint } from "./auth-refresh-endpoint";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
@@ -609,6 +609,90 @@ async function startServer() {
   // Auth routes
   registerAuthRoutes(app);
   registerRefreshEndpoint(app);
+
+  // Platform admin tenant management endpoints
+  app.get("/api/platform/tenants", async (req, res) => {
+    try {
+      const authResult = await authService.authenticateRequest(req);
+      if (!authResult?.user?.isPlatformAdmin) {
+        return res.status(403).json({ error: "Platform admin access required" });
+      }
+
+      const dbInstance = await getDb();
+      if (!dbInstance) {
+        return res.status(500).json({ error: "Database not available" });
+      }
+
+      const { tenants } = await import("../../drizzle/schema");
+      const { desc } = await import("drizzle-orm");
+
+      const items = await dbInstance
+        .select({
+          id: tenants.id,
+          name: tenants.name,
+          subdomain: tenants.subdomain,
+          status: tenants.status,
+          createdAt: tenants.createdAt,
+        })
+        .from(tenants)
+        .orderBy(desc(tenants.createdAt));
+
+      res.json({ tenants: items });
+    } catch (error) {
+      console.error("Platform tenants fetch failed", error);
+      res.status(500).json({ error: "Failed to fetch tenants" });
+    }
+  });
+
+  app.patch("/api/platform/tenants/:id/status", async (req, res) => {
+    try {
+      const authResult = await authService.authenticateRequest(req);
+      if (!authResult?.user?.isPlatformAdmin) {
+        return res.status(403).json({ error: "Platform admin access required" });
+      }
+
+      const status = String(req.body?.status ?? "");
+      const allowedStatuses = new Set([
+        "trial",
+        "active",
+        "suspended",
+        "canceled",
+      ]);
+
+      if (!allowedStatuses.has(status)) {
+        return res.status(400).json({ error: "Invalid tenant status" });
+      }
+
+      const dbInstance = await getDb();
+      if (!dbInstance) {
+        return res.status(500).json({ error: "Database not available" });
+      }
+
+      const tenantId = req.params.id;
+      const { tenants } = await import("../../drizzle/schema");
+      const { eq } = await import("drizzle-orm");
+
+      const [tenant] = await dbInstance
+        .select({ id: tenants.id })
+        .from(tenants)
+        .where(eq(tenants.id, tenantId))
+        .limit(1);
+
+      if (!tenant) {
+        return res.status(404).json({ error: "Tenant not found" });
+      }
+
+      await dbInstance
+        .update(tenants)
+        .set({ status })
+        .where(eq(tenants.id, tenantId));
+
+      res.json({ success: true, tenantId, status });
+    } catch (error) {
+      console.error("Platform tenant status update failed", error);
+      res.status(500).json({ error: "Failed to update tenant status" });
+    }
+  });
 
   // SEO routes - sitemap and robots.txt
   app.get("/sitemap.xml", async (req, res) => {

@@ -2,7 +2,7 @@ import { ImpersonationBanner } from "@/components/ImpersonationBanner";
 import { trpc } from "@/lib/trpc";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
+import { Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { StripeTerminalProvider } from "@/contexts/StripeTerminalContext";
@@ -58,13 +58,14 @@ import AccountingIntegrations from "./pages/AccountingIntegrations";
 // iZettle removed - using Stripe Terminal instead
 import AccountantExport from "./pages/AccountantExport";
 import SaasAdminLogin from "./pages/SaasAdmin/SaasAdminLogin";
-import SaasAdminOverview from "./pages/SaasAdmin/SaasAdminOverview";
 import SaasAdminTenants from "./pages/SaasAdmin/SaasAdminTenants";
 import SaasAdminTenantDetails from "./pages/SaasAdmin/SaasAdminTenantDetails";
 import SaasAdminTenantOnboarding from "./pages/SaasAdminTenantOnboarding";
 import SaasAdminSubscriptions from "./pages/SaasAdmin/SaasAdminSubscriptions";
+import TenantList from "./pages/SaasAdmin/TenantList";
 import SystemStatus from "./pages/SystemStatus";
 import ProtectedSaasAdminRoute from "./components/ProtectedSaasAdminRoute";
+import ProtectedTenantRoute from "./components/ProtectedTenantRoute";
 import SignUp from "./pages/SignUp";
 import Contact from "./pages/Contact";
 import { VerifyEmail } from "./pages/VerifyEmail";
@@ -145,9 +146,14 @@ function Router() {
       <Route path="/stripe/callback" component={StripeCallback} />
       <Route path="/print-receipt/:orderId" component={PrintReceipt} />
       <Route path="/saas-admin/login" component={SaasAdminLogin} />
+      <Route path="/saas-admin/dashboard">
+        <ProtectedSaasAdminRoute>
+          <TenantList />
+        </ProtectedSaasAdminRoute>
+      </Route>
       <Route path="/saas-admin">
         <ProtectedSaasAdminRoute>
-          <SaasAdminOverview />
+          <SaasAdminRedirect />
         </ProtectedSaasAdminRoute>
       </Route>
       <Route path="/saas-admin/tenants/new">
@@ -171,7 +177,11 @@ function Router() {
         </ProtectedSaasAdminRoute>
       </Route>
       <Route path="/system-status" component={SystemStatus} />
-      <Route path="/dashboard" component={Dashboard} />
+      <Route path="/dashboard">
+        <ProtectedTenantRoute>
+          <Dashboard />
+        </ProtectedTenantRoute>
+      </Route>
       <Route path="/customers/:id" component={CustomerDetails} />
       <Route path="/customers" component={Customers} />
       <Route path="/services" component={Services} />
@@ -198,6 +208,16 @@ function Router() {
       <Route component={NotFound} />
     </Switch>
   );
+}
+
+function SaasAdminRedirect() {
+  const [, setLocation] = useLocation();
+
+  useEffect(() => {
+    setLocation("/saas-admin/dashboard");
+  }, [setLocation]);
+
+  return null;
 }
 
 // NOTE: About Theme

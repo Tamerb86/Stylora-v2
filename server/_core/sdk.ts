@@ -313,14 +313,6 @@ class SDKServer {
     const signedInAt = new Date();
     let user = await db.getUserByOpenId(sessionUserId);
 
-    // Handle impersonation: if platform owner is impersonating a tenant
-    if (session.impersonatedTenantId && session.openId === ENV.ownerOpenId) {
-      // Platform owner is impersonating - override tenantId
-      if (user) {
-        user = { ...user, tenantId: session.impersonatedTenantId };
-      }
-    }
-
     // If user not in DB, sync from OAuth server automatically (if configured)
     if (!user && process.env.OAUTH_SERVER_URL) {
       try {
@@ -345,6 +337,22 @@ class SDKServer {
       throw ForbiddenError("User not found");
     }
 
+    const baseTenantId = user.tenantId;
+    const baseTenant = baseTenantId
+      ? await db.getTenantById(baseTenantId)
+      : null;
+    const isPlatformAdmin =
+      user.role === "owner" && baseTenant?.subdomain === "platform";
+    let effectiveTenantId = baseTenantId;
+    let tenantSubdomain = baseTenant?.subdomain ?? null;
+
+    if (session.impersonatedTenantId && isPlatformAdmin) {
+      effectiveTenantId = session.impersonatedTenantId;
+      const effectiveTenant = await db.getTenantById(effectiveTenantId);
+      tenantSubdomain = effectiveTenant?.subdomain ?? tenantSubdomain;
+      user = { ...user, tenantId: effectiveTenantId };
+    }
+
     await db.upsertUser({
       openId: user.openId,
       tenantId: user.tenantId,
@@ -353,7 +361,12 @@ class SDKServer {
     });
 
     return {
-      user,
+      user: {
+        ...user,
+        tenantSubdomain,
+        tenantContext: isPlatformAdmin ? "PLATFORM" : "TENANT",
+        isPlatformAdmin,
+      },
       impersonatedTenantId: session.impersonatedTenantId ?? null,
     };
   }

@@ -5,14 +5,26 @@ import * as db from "./db";
 import { ENV } from "./_core/env";
 
 // Mock request and response objects
-const createMockContext = (user: TrpcContext["user"]): TrpcContext => ({
-  req: {} as any,
-  res: {
-    cookie: () => {},
-    clearCookie: () => {},
-  } as any,
-  user,
-});
+const createMockContext = (user: TrpcContext["user"]): TrpcContext => {
+  const isPlatformAdmin = Boolean(user?.isPlatformAdmin ?? user?.role === "owner");
+  const tenantContext = isPlatformAdmin ? "PLATFORM" : "TENANT";
+
+  return {
+    req: {} as any,
+    res: {
+      cookie: () => {},
+      clearCookie: () => {},
+    } as any,
+    user: user
+      ? {
+          ...user,
+          isPlatformAdmin,
+          tenantContext,
+        }
+      : null,
+    tenantContext,
+  };
+};
 
 describe("SaaS Admin - Platform Admin Procedures", () => {
   const platformOwnerOpenId = ENV.ownerOpenId;

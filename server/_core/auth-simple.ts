@@ -46,6 +46,8 @@ export type SessionPayload = {
   act?: string; // Admin user ID performing impersonation
 };
 
+export type TenantContextType = "PLATFORM" | "TENANT";
+
 const SALT_ROUNDS = 10;
 
 class AuthService {
@@ -138,25 +140,44 @@ class AuthService {
     let user = await db.getUserByOpenId(session.openId);
     if (!user) return null;
 
-    // SECURITY: Always derive tenantId from JWT claims, not from user table
-    // This ensures impersonation works correctly and prevents stale data
-    let effectiveTenantId = user.tenantId;
+    // Always resolve tenant from the authenticated user record
+    const baseTenantId = user.tenantId;
+    const baseTenant = baseTenantId
+      ? await db.getTenantById(baseTenantId)
+      : null;
+    const isPlatformAdmin =
+      user.role === "owner" && baseTenant?.subdomain === "platform";
+
+    let effectiveTenantId = baseTenantId;
     let isImpersonating = false;
 
-    if (session.impersonating && session.impersonatedTenantId && session.openId === ENV.ownerOpenId) {
+    if (session.impersonating && session.impersonatedTenantId && isPlatformAdmin) {
       // Platform admin is impersonating a tenant
       effectiveTenantId = session.impersonatedTenantId;
       isImpersonating = true;
       user = { ...user, tenantId: effectiveTenantId };
-    } else if (session.tenantId) {
-      // Use tenantId from JWT if available (for future flexibility)
-      effectiveTenantId = session.tenantId;
-      user = { ...user, tenantId: effectiveTenantId };
     }
+
+    const effectiveTenant =
+      effectiveTenantId === baseTenantId
+        ? baseTenant
+        : await db.getTenantById(effectiveTenantId);
+    const tenantSubdomain = effectiveTenant?.subdomain ?? null;
+    const tenantContext: TenantContextType = isPlatformAdmin
+      ? "PLATFORM"
+      : "TENANT";
+    const userWithContext = {
+      ...user,
+      tenantSubdomain,
+      tenantContext,
+      isPlatformAdmin,
+    };
 
     // Log request for audit trail (mask sensitive data)
     const clientIp = (req.ip as string) || (req.headers["x-forwarded-for"] as string) || "unknown";
-    logInfo(`[Auth] Request: userId=${user.id}, tenantId=${effectiveTenantId}, impersonating=${isImpersonating}, ip=${clientIp}`);
+    logInfo(
+      `[Auth] Request: userId=${user.id}, tenantId=${effectiveTenantId}, impersonating=${isImpersonating}, ip=${clientIp}`
+    );
 
     await db.upsertUser({
       openId: user.openId,
@@ -166,7 +187,7 @@ class AuthService {
     });
 
     return {
-      user,
+      user: userWithContext,
       impersonatedTenantId: session.impersonatedTenantId ?? null,
       isImpersonating,
     };
@@ -305,9 +326,13 @@ export function registerAuthRoutes(app: Express) {
         return;
       }
 
+      let tenant: Awaited<ReturnType<typeof db.getTenantById>> | null = null;
+      let isPlatformAdmin = false;
+      let tenantContext: TenantContextType = "TENANT";
+
       // Tenant check (if you use multi-tenant)
       try {
-        const tenant = await db.getTenantById(user.tenantId);
+        tenant = await db.getTenantById(user.tenantId);
         if (!tenant) {
           logDb.error("login-tenant-missing", new Error("Tenant not found"));
           res.status(500).json({
@@ -345,6 +370,10 @@ export function registerAuthRoutes(app: Express) {
         });
         return;
       }
+
+      isPlatformAdmin =
+        user.role === "owner" && tenant?.subdomain === "platform";
+      tenantContext = isPlatformAdmin ? "PLATFORM" : "TENANT";
 
       // Create session
       const sessionToken = await authService.createSessionToken(
@@ -399,6 +428,9 @@ export function registerAuthRoutes(app: Express) {
           email: user.email,
           role: user.role,
           tenantId: user.tenantId,
+          tenantSubdomain: tenant?.subdomain ?? null,
+          tenantContext,
+          isPlatformAdmin,
         },
       });
     } catch (error) {
@@ -647,6 +679,11 @@ export function registerAuthRoutes(app: Express) {
           email: result.user.email,
           role: result.user.role,
           tenantId: result.user.tenantId,
+          tenantSubdomain: result.user.tenantSubdomain,
+          tenantContext: result.user.tenantContext,
+          isPlatformAdmin: result.user.isPlatformAdmin,
+          impersonatedTenantId: result.impersonatedTenantId,
+          isImpersonating: result.isImpersonating,
         },
       });
     } catch (error) {

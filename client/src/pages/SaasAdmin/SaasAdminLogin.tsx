@@ -14,16 +14,14 @@ export default function SaasAdminLogin() {
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Check if user is platform owner by checking tenantId
-  // Platform owner has tenantId = "platform-admin-tenant"
-  const isPlatformOwner = user && user.tenantId === "platform-admin-tenant";
+  const isPlatformAdmin = Boolean(user?.isPlatformAdmin);
 
   useEffect(() => {
-    // If user is logged in and is platform owner, redirect to /saas-admin
-    if (user && isPlatformOwner) {
-      setLocation("/saas-admin");
+    // If user is logged in and is platform admin, redirect to /saas-admin/dashboard
+    if (user && isPlatformAdmin) {
+      setLocation("/saas-admin/dashboard");
     }
-  }, [user, setLocation, isPlatformOwner]);
+  }, [user, setLocation, isPlatformAdmin]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,9 +58,9 @@ export default function SaasAdminLogin() {
       if (response.ok && data.success) {
         toast.success("Innlogget!");
         await refetch();
-        // Check if user is platform owner after login
+        // Check if user is platform admin after login
         setTimeout(() => {
-          window.location.href = "/saas-admin";
+          window.location.href = "/saas-admin/dashboard";
         }, 500);
       } else {
         // Provide more specific error messages
@@ -97,7 +95,7 @@ export default function SaasAdminLogin() {
   }
 
   // If logged in but not platform owner, show access denied
-  const showAccessDenied = user && !isPlatformOwner;
+  const showAccessDenied = user && !isPlatformAdmin;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-4">

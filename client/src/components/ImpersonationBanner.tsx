@@ -30,7 +30,7 @@ export function ImpersonationBanner() {
         document.cookie = `stylora-session=${adminToken}; path=/; max-age=2592000`; // 30 days
         
         // Reload to admin panel
-        window.location.href = "/saas-admin";
+        window.location.href = "/saas-admin/dashboard";
       } else {
         // Force re-login - redirect to home
         window.location.href = data.redirectUrl;
