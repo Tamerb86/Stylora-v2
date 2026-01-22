@@ -7,6 +7,7 @@ import {
   getEnvironmentSummary,
 } from "./_core/validate-env";
 import { logger } from "./_core/logger";
+import { runStartupMigrations } from "./startup-migrations";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,6 +19,9 @@ async function startServer() {
   // Log environment summary
   const envSummary = getEnvironmentSummary();
   logger.info("Starting server with configuration", envSummary);
+
+  // Run startup migrations
+  await runStartupMigrations();
   const app = express();
   const server = createServer(app);
 
