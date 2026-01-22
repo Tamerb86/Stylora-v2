@@ -90,6 +90,8 @@ import Privacy from "./pages/Privacy";
 import Onboarding from "./pages/Onboarding";
 import Gallery from "./pages/Gallery";
 import TerminalTest from "./pages/TerminalTest";
+import Pricing from "./pages/Pricing";
+import SubscriptionSettings from "./pages/SubscriptionSettings";
 
 function Router() {
   return (
@@ -116,6 +118,7 @@ function Router() {
       <Route path="/testimonials" component={Testimonials} />
       <Route path="/gallery" component={Gallery} />
       <Route path="/contact" component={Contact} />
+      <Route path="/pricing" component={Pricing} />
       <Route path="/terms" component={Terms} />
       <Route path="/privacy" component={Privacy} />
       <Route path="/timeclock" component={TimeClock} />
@@ -194,6 +197,7 @@ function Router() {
       <Route path="/financial" component={Financial} />
       <Route path="/advanced-reports" component={AdvancedFinancialReports} />
       <Route path="/settings" component={Settings} />
+      <Route path="/subscription" component={SubscriptionSettings} />
       <Route path="/notifications" component={Notifications} />
       <Route path="/loyalty" component={Loyalty} />
       <Route path="/communications" component={Communications} />

@@ -994,5 +994,114 @@
       "title": "ساعات العمل",
       "description": "إدارة مواعيد فتح صالونك للحجز"
     }
+  },
+  "pricing": {
+    "title": "اختر خطتك",
+    "subtitle": "اختر الخطة التي تناسب عملك بشكل أفضل",
+    "trial": "تجربة مجانية لمدة 14 يومًا",
+    "month": "شهر",
+    "mostPopular": "الأكثر شعبية",
+    "upToEmployees": "حتى {{count}} موظفين",
+    "smsQuota": "{{count}} رسالة نصية شهريًا",
+    "startNow": "ابدأ الآن",
+    "features": {
+      "appointments": "مواعيد غير محدودة",
+      "customers": "قاعدة عملاء غير محدودة",
+      "onlineBooking": "الحجز عبر الإنترنت",
+      "smsReminders": "تذكيرات الرسائل النصية",
+      "basicReports": "تقارير أساسية",
+      "allStart": "كل شيء في خطة البداية",
+      "inventory": "إدارة المخزون",
+      "commissions": "تتبع العمولات",
+      "advancedReports": "تقارير متقدمة",
+      "prioritySupport": "دعم ذو أولوية",
+      "allPro": "كل شيء في الخطة الاحترافية",
+      "apiAccess": "الوصول إلى API",
+      "multiLocation": "دعم متعدد المواقع",
+      "customIntegrations": "التكاملات المخصصة",
+      "dedicatedSupport": "دعم مخصص"
+    },
+    "faq": {
+      "title": "الأسئلة الشائعة",
+      "trial": {
+        "question": "كيف تعمل التجربة المجانية؟",
+        "answer": "تحصل على 14 يومًا من الوصول المجاني لجميع الميزات. لا حاجة لبطاقة ائتمان. يمكنك الإلغاء في أي وقت."
+      },
+      "cancel": {
+        "question": "هل يمكنني الإلغاء في أي وقت؟",
+        "answer": "نعم، يمكنك إلغاء اشتراكك في أي وقت. سيظل لديك حق الوصول إلى خطتك حتى نهاية فترة الفوترة."
+      },
+      "upgrade": {
+        "question": "هل يمكنني ترقية خطتي لاحقًا؟",
+        "answer": "بالتأكيد! يمكنك ترقية أو تخفيض خطتك في أي وقت. تصبح التغييرات سارية فورًا."
+      }
+    }
+  },
+  "subscription": {
+    "title": "الاشتراك",
+    "subtitle": "إدارة اشتراكك والفواتير",
+    "viewPlans": "عرض الخطط",
+    "choosePlan": "اختر خطة",
+    "noSubscription": "لا يوجد اشتراك نشط",
+    "currentPlan": "الخطة الحالية",
+    "changePlan": "تغيير الخطة",
+    "confirmChange": "تأكيد التغيير",
+    "managePayment": "إدارة الدفع",
+    "updatePaymentMethod": "تحديث طريقة الدفع",
+    "renewalDate": "يتجدد في",
+    "daysRemaining": "{{count}} يومًا متبقيًا",
+    "cancel": "إلغاء الاشتراك",
+    "cancelSuccess": "تم إلغاء الاشتراك",
+    "changePlanSuccess": "تم تحديث خطتك",
+    "current": {
+      "title": "خطتك الحالية",
+      "description": "أنت حاليًا على خطة {{plan}}"
+    },
+    "status": {
+      "active": "نشط",
+      "pastDue": "متأخر",
+      "canceled": "ملغى"
+    },
+    "pastDue": {
+      "title": "الاشتراك متأخر",
+      "message": "فشلت عملية الدفع. يرجى تحديث طريقة الدفع للمتابعة."
+    },
+    "cancelScheduled": {
+      "title": "تم جدولة الإلغاء",
+      "message": "سيتم إلغاء اشتراكك في {{date}}"
+    },
+    "cancelConfirm": {
+      "title": "إلغاء الاشتراك",
+      "message": "هل أنت متأكد من أنك تريد إلغاء اشتراكك؟ سيظل لديك حق الوصول إلى خطتك حتى نهاية فترة الفوترة.",
+      "confirm": "نعم، إلغاء"
+    },
+    "changePlanDialog": {
+      "title": "تغيير الخطة",
+      "description": "اختر خطة جديدة لاشتراكك"
+    },
+    "features": {
+      "title": "الميزات المضمنة",
+      "employees": "{{count}} موظفين",
+      "sms": "{{count}} رسالة نصية/شهر"
+    },
+    "banner": {
+      "pastDue": {
+        "title": "فشل الدفع",
+        "message": "اشتراكك متأخر. يرجى تحديث طريقة الدفع."
+      },
+      "canceled": {
+        "title": "تم إلغاء الاشتراك",
+        "message": "تم إلغاء اشتراكك. اختر خطة للمتابعة."
+      },
+      "trialEnding": {
+        "title": "انتهاء التجربة قريبًا",
+        "message": "تنتهي تجربتك في {{days}} أيام. اختر خطة للمتابعة."
+      }
+    },
+    "errors": {
+      "portalFailed": "فشل فتح بوابة العملاء",
+      "cancelFailed": "فشل إلغاء الاشتراك",
+      "changePlanFailed": "فشل تغيير الخطة"
+    }
   }
 }

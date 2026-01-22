@@ -994,5 +994,114 @@
       "title": "Business Hours",
       "description": "Manage when your salon is open for booking"
     }
+  },
+  "pricing": {
+    "title": "Choose Your Plan",
+    "subtitle": "Select the plan that best fits your business",
+    "trial": "14-day free trial",
+    "month": "month",
+    "mostPopular": "Most Popular",
+    "upToEmployees": "Up to {{count}} employees",
+    "smsQuota": "{{count}} SMS per month",
+    "startNow": "Start Now",
+    "features": {
+      "appointments": "Unlimited appointments",
+      "customers": "Unlimited customer database",
+      "onlineBooking": "Online booking",
+      "smsReminders": "SMS reminders",
+      "basicReports": "Basic reports",
+      "allStart": "Everything in Start",
+      "inventory": "Inventory management",
+      "commissions": "Commission tracking",
+      "advancedReports": "Advanced reports",
+      "prioritySupport": "Priority support",
+      "allPro": "Everything in Pro",
+      "apiAccess": "API access",
+      "multiLocation": "Multi-location support",
+      "customIntegrations": "Custom integrations",
+      "dedicatedSupport": "Dedicated support"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "trial": {
+        "question": "How does the free trial work?",
+        "answer": "You get 14 days of free access to all features. No credit card required. Cancel anytime."
+      },
+      "cancel": {
+        "question": "Can I cancel anytime?",
+        "answer": "Yes, you can cancel your subscription at any time. You will still have access to your plan until the end of the billing period."
+      },
+      "upgrade": {
+        "question": "Can I upgrade my plan later?",
+        "answer": "Absolutely! You can upgrade or downgrade your plan at any time. Changes take effect immediately."
+      }
+    }
+  },
+  "subscription": {
+    "title": "Subscription",
+    "subtitle": "Manage your subscription and billing",
+    "viewPlans": "View Plans",
+    "choosePlan": "Choose Plan",
+    "noSubscription": "No Active Subscription",
+    "currentPlan": "Current Plan",
+    "changePlan": "Change Plan",
+    "confirmChange": "Confirm Change",
+    "managePayment": "Manage Payment",
+    "updatePaymentMethod": "Update Payment Method",
+    "renewalDate": "Renews on",
+    "daysRemaining": "{{count}} days remaining",
+    "cancel": "Cancel Subscription",
+    "cancelSuccess": "Subscription has been canceled",
+    "changePlanSuccess": "Your plan has been updated",
+    "current": {
+      "title": "Your Current Plan",
+      "description": "You are currently on the {{plan}} plan"
+    },
+    "status": {
+      "active": "Active",
+      "pastDue": "Past Due",
+      "canceled": "Canceled"
+    },
+    "pastDue": {
+      "title": "Subscription Past Due",
+      "message": "Your payment has failed. Please update your payment method to continue."
+    },
+    "cancelScheduled": {
+      "title": "Cancellation Scheduled",
+      "message": "Your subscription will be canceled on {{date}}"
+    },
+    "cancelConfirm": {
+      "title": "Cancel Subscription",
+      "message": "Are you sure you want to cancel your subscription? You will still have access to your plan until the end of the billing period.",
+      "confirm": "Yes, Cancel"
+    },
+    "changePlanDialog": {
+      "title": "Change Plan",
+      "description": "Select a new plan for your subscription"
+    },
+    "features": {
+      "title": "Features Included",
+      "employees": "{{count}} employees",
+      "sms": "{{count}} SMS/month"
+    },
+    "banner": {
+      "pastDue": {
+        "title": "Payment Failed",
+        "message": "Your subscription is past due. Please update your payment method."
+      },
+      "canceled": {
+        "title": "Subscription Canceled",
+        "message": "Your subscription has been canceled. Choose a plan to continue."
+      },
+      "trialEnding": {
+        "title": "Trial Ending Soon",
+        "message": "Your trial ends in {{days}} days. Choose a plan to continue."
+      }
+    },
+    "errors": {
+      "portalFailed": "Failed to open customer portal",
+      "cancelFailed": "Failed to cancel subscription",
+      "changePlanFailed": "Failed to change plan"
+    }
   }
 }

@@ -994,5 +994,114 @@
       "title": "Åpningstider",
       "description": "Administrer når salongen din er åpen for booking"
     }
+  },
+  "pricing": {
+    "title": "Velg Din Plan",
+    "subtitle": "Velg planen som passer best for din bedrift",
+    "trial": "14 dagers gratis prøveperiode",
+    "month": "måned",
+    "mostPopular": "Mest Populær",
+    "upToEmployees": "Opptil {{count}} ansatte",
+    "smsQuota": "{{count}} SMS per måned",
+    "startNow": "Start Nå",
+    "features": {
+      "appointments": "Ubegrensede avtaler",
+      "customers": "Ubegrenset kundebase",
+      "onlineBooking": "Online bestilling",
+      "smsReminders": "SMS påminnelser",
+      "basicReports": "Grunnleggende rapporter",
+      "allStart": "Alt fra Start-planen",
+      "inventory": "Lagerstyring",
+      "commissions": "Provisjonssporing",
+      "advancedReports": "Avanserte rapporter",
+      "prioritySupport": "Prioritert support",
+      "allPro": "Alt fra Pro-planen",
+      "apiAccess": "API-tilgang",
+      "multiLocation": "Multi-lokasjon støtte",
+      "customIntegrations": "Tilpassede integrasjoner",
+      "dedicatedSupport": "Dedikert support"
+    },
+    "faq": {
+      "title": "Ofte Stilte Spørsmål",
+      "trial": {
+        "question": "Hvordan fungerer gratisperioden?",
+        "answer": "Du får 14 dager gratis tilgang til alle funksjoner. Intet kredittkort kreves. Du kan kansellere når som helst."
+      },
+      "cancel": {
+        "question": "Kan jeg kansellere når som helst?",
+        "answer": "Ja, du kan kansellere abonnementet ditt når som helst. Du vil fortsatt ha tilgang til planen din til slutten av faktureringsperioden."
+      },
+      "upgrade": {
+        "question": "Kan jeg oppgradere planen min senere?",
+        "answer": "Absolutt! Du kan oppgradere eller nedgradere planen din når som helst. Endringer trer i kraft umiddelbart."
+      }
+    }
+  },
+  "subscription": {
+    "title": "Abonnement",
+    "subtitle": "Administrer ditt abonnement og fakturering",
+    "viewPlans": "Se Planer",
+    "choosePlan": "Velg Plan",
+    "noSubscription": "Ingen Aktivt Abonnement",
+    "currentPlan": "Nåværende Plan",
+    "changePlan": "Endre Plan",
+    "confirmChange": "Bekreft Endring",
+    "managePayment": "Administrer Betaling",
+    "updatePaymentMethod": "Oppdater Betalingsmetode",
+    "renewalDate": "Fornyes",
+    "daysRemaining": "{{count}} dager igjen",
+    "cancel": "Avbryt Abonnement",
+    "cancelSuccess": "Abonnementet har blitt kansellert",
+    "changePlanSuccess": "Planen din har blitt oppdatert",
+    "current": {
+      "title": "Din Nåværende Plan",
+      "description": "Du er for øyeblikket på {{plan}}-planen"
+    },
+    "status": {
+      "active": "Aktiv",
+      "pastDue": "Forfalt",
+      "canceled": "Kansellert"
+    },
+    "pastDue": {
+      "title": "Abonnement Forfalt",
+      "message": "Betalingen din mislyktes. Vennligst oppdater betalingsmetoden din for å fortsette."
+    },
+    "cancelScheduled": {
+      "title": "Kansellering Planlagt",
+      "message": "Abonnementet ditt vil kanselleres {{date}}"
+    },
+    "cancelConfirm": {
+      "title": "Kanseller Abonnement",
+      "message": "Er du sikker på at du vil kansellere abonnementet ditt? Du vil fortsatt ha tilgang til planen din til slutten av faktureringsperioden.",
+      "confirm": "Ja, Kanseller"
+    },
+    "changePlanDialog": {
+      "title": "Endre Plan",
+      "description": "Velg en ny plan for abonnementet ditt"
+    },
+    "features": {
+      "title": "Funksjoner Inkludert",
+      "employees": "{{count}} ansatte",
+      "sms": "{{count}} SMS/måned"
+    },
+    "banner": {
+      "pastDue": {
+        "title": "Betalingen Mislyktes",
+        "message": "Abonnementet ditt er forfalt. Vennligst oppdater betalingsmetoden din."
+      },
+      "canceled": {
+        "title": "Abonnement Kansellert",
+        "message": "Abonnementet ditt er kansellert. Velg en plan for å fortsette."
+      },
+      "trialEnding": {
+        "title": "Prøveperioden Utløper Snart",
+        "message": "Din prøveperiode utløper om {{days}} dager. Velg en plan for å fortsette."
+      }
+    },
+    "errors": {
+      "portalFailed": "Kunne ikke åpne kundeportalen",
+      "cancelFailed": "Kunne ikke kansellere abonnement",
+      "changePlanFailed": "Kunne ikke endre plan"
+    }
   }
 }
