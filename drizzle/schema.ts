@@ -882,7 +882,11 @@ export const subscriptionPlans = mysqlTable("subscriptionPlans", {
   id: int("id").autoincrement().primaryKey(),
   name: varchar("name", { length: 50 }).notNull(), // 'Start', 'Pro', 'Premium'
   displayNameNo: varchar("displayNameNo", { length: 100 }).notNull(), // 'Start / Lite'
+  displayNameEn: varchar("displayNameEn", { length: 100 }), // English name
+  displayNameAr: varchar("displayNameAr", { length: 100 }), // Arabic name
   priceMonthly: decimal("priceMonthly", { precision: 10, scale: 2 }).notNull(),
+  priceYearly: decimal("priceYearly", { precision: 10, scale: 2 }), // Yearly price with discount
+  stripePriceId: varchar("stripePriceId", { length: 255 }), // Stripe Price ID
   maxEmployees: int("maxEmployees"),
   maxLocations: int("maxLocations"),
   smsQuota: int("smsQuota"),
@@ -906,6 +910,9 @@ export const tenantSubscriptions = mysqlTable(
     currentPeriodStart: date("currentPeriodStart").notNull(),
     currentPeriodEnd: date("currentPeriodEnd").notNull(),
     stripeSubscriptionId: varchar("stripeSubscriptionId", { length: 255 }),
+    stripeCustomerId: varchar("stripeCustomerId", { length: 255 }), // Stripe Customer ID
+    cancelAtPeriodEnd: boolean("cancelAtPeriodEnd").default(false), // Cancel at end of billing period
+    canceledAt: timestamp("canceledAt"), // When subscription was canceled
     createdAt: timestamp("createdAt").defaultNow().notNull(),
     updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   },

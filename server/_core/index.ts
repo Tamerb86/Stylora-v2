@@ -13,6 +13,7 @@ import { serveStatic, setupVite } from "./vite";
 import { startNotificationScheduler } from "../notificationScheduler";
 import { scheduleBackups } from "../services/backup";
 import { handleStripeWebhook } from "../stripe-webhook";
+import { handleStripeSubscriptionWebhook } from "../stripe-subscription-webhook";
 import { handleVippsCallback } from "../vipps-callback";
 import * as Sentry from "@sentry/node";
 import { getDb } from "../db";
@@ -307,6 +308,14 @@ async function startServer() {
     webhookLimiter,
     express.raw({ type: "application/json" }),
     handleStripeWebhook
+  );
+
+  // Stripe subscription webhook endpoint
+  app.post(
+    "/api/stripe/subscription-webhook",
+    webhookLimiter,
+    express.raw({ type: "application/json" }),
+    handleStripeSubscriptionWebhook
   );
 
   // Vipps callback endpoint (must be registered before JSON parser)

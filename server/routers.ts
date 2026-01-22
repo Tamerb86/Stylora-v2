@@ -30,6 +30,7 @@ import { exportRouter } from "./export";
 import { loyaltyRouter } from "./loyalty-router";
 import { onboardingRouter } from "./routers/onboarding";
 import { monitoringRouter } from "./routers/monitoring";
+import { subscriptionsRouter } from "./routers/subscriptions";
 import { ENV } from "./_core/env";
 
 // ============================================================================
@@ -155,6 +156,7 @@ export const appRouter = router({
   loyalty: loyaltyRouter,
   onboarding: onboardingRouter,
   monitoring: monitoringRouter,
+  subscriptions: subscriptionsRouter,
 
   // ============================================================================
   // STRIPE CONNECT (OAuth for SaaS)
