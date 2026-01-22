@@ -125,6 +125,7 @@ export async function hasFeatureAccess(
 
 /**
  * Check if tenant's SMS quota is sufficient
+ * TODO: Implement SMS usage tracking system
  */
 export async function hasSmsQuota(
   tenantId: string,
@@ -138,7 +139,12 @@ export async function hasSmsQuota(
   }
 
   // TODO: Implement SMS usage tracking
-  // For now, assume quota is available
+  // For now, log a warning and allow the SMS
+  console.warn(
+    `[Plan Limits] SMS quota check not fully implemented for tenant ${tenantId}. Required: ${requiredCount}, Quota: ${subscriptionInfo.limits.smsQuota}`
+  );
+  
+  // Return true to avoid blocking functionality until SMS tracking is implemented
   return true;
 }
 

@@ -51,9 +51,10 @@ export async function handleStripeSubscriptionWebhook(
       sig,
       ENV.stripeWebhookSecret
     );
-  } catch (err: any) {
-    console.error("[Stripe Subscription Webhook] Signature verification failed:", err.message);
-    res.status(400).json({ error: `Webhook signature verification failed: ${err.message}` });
+  } catch (err) {
+    const error = err as Error;
+    console.error("[Stripe Subscription Webhook] Signature verification failed:", error.message);
+    res.status(400).json({ error: `Webhook signature verification failed: ${error.message}` });
     return;
   }
 
@@ -144,10 +145,11 @@ export async function handleStripeSubscriptionWebhook(
     }
 
     res.json({ received: true });
-  } catch (error: any) {
+  } catch (error) {
+    const err = error as Error;
     console.error(
       `[Stripe Subscription Webhook] Error processing ${event.type}:`,
-      error.message
+      err.message
     );
     res.status(500).json({ error: "Webhook processing failed" });
   }

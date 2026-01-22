@@ -127,8 +127,15 @@ export async function createCheckoutSession({
     });
   }
 
+  if (!tenant.email) {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "Tenant email is required for subscription",
+    });
+  }
+
   // Get or create customer
-  const customerId = await createStripeCustomer(tenantId, tenant.email || "");
+  const customerId = await createStripeCustomer(tenantId, tenant.email);
 
   // Create checkout session
   const session = await stripe.checkout.sessions.create({
@@ -428,9 +435,14 @@ export async function handleSubscriptionUpdate(
     throw new Error("Tenant ID not found in subscription metadata");
   }
 
-  const planId = parseInt(subscription.metadata.planId || "0");
-  if (!planId) {
+  const planIdStr = subscription.metadata.planId;
+  if (!planIdStr) {
     throw new Error("Plan ID not found in subscription metadata");
+  }
+
+  const planId = parseInt(planIdStr, 10);
+  if (isNaN(planId) || planId <= 0) {
+    throw new Error(`Invalid plan ID in subscription metadata: ${planIdStr}`);
   }
 
   // Map Stripe status to our status

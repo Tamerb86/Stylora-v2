@@ -36,6 +36,9 @@ export default function SubscriptionSettings() {
   const [isUpgradeDialogOpen, setIsUpgradeDialogOpen] = useState(false);
   const [selectedPlanId, setSelectedPlanId] = useState<number | null>(null);
 
+  // TanStack Query utils for cache invalidation
+  const utils = trpc.useUtils();
+
   // Fetch current subscription
   const { data: subscriptionData, isLoading: isLoadingSubscription } =
     trpc.subscriptions.getCurrentSubscription.useQuery();
@@ -59,8 +62,8 @@ export default function SubscriptionSettings() {
   const cancelMutation = trpc.subscriptions.cancelSubscription.useMutation({
     onSuccess: () => {
       toast.success(t("subscription.cancelSuccess"));
-      // Refetch subscription data
-      window.location.reload();
+      // Invalidate subscription data to refetch
+      utils.subscriptions.getCurrentSubscription.invalidate();
     },
     onError: (error) => {
       toast.error(error.message || t("subscription.errors.cancelFailed"));
@@ -72,8 +75,8 @@ export default function SubscriptionSettings() {
     onSuccess: () => {
       toast.success(t("subscription.changePlanSuccess"));
       setIsUpgradeDialogOpen(false);
-      // Refetch subscription data
-      window.location.reload();
+      // Invalidate subscription data to refetch
+      utils.subscriptions.getCurrentSubscription.invalidate();
     },
     onError: (error) => {
       toast.error(error.message || t("subscription.errors.changePlanFailed"));
