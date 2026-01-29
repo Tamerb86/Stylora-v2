@@ -1,0 +1,59 @@
+{
+  "name": "tiktok-content-generator",
+  "version": "1.0.0",
+  "description": "TikTok Content Generator - A SaaS platform for generating TikTok content for dropshippers and influencers",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm run --parallel dev",
+    "dev:backend": "pnpm --filter @tiktok-generator/backend dev",
+    "dev:frontend": "pnpm --filter @tiktok-generator/frontend dev",
+    "dev:extension": "pnpm --filter @tiktok-generator/extension dev",
+    "build": "pnpm run -r build",
+    "build:backend": "pnpm --filter @tiktok-generator/backend build",
+    "build:frontend": "pnpm --filter @tiktok-generator/frontend build",
+    "build:extension": "pnpm --filter @tiktok-generator/extension build",
+    "start": "pnpm --filter @tiktok-generator/backend start",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
+    "format": "prettier --write \"packages/**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "format:check": "prettier --check \"packages/**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "typecheck": "pnpm run -r typecheck",
+    "clean": "pnpm run -r clean && rm -rf node_modules",
+    "db:generate": "pnpm --filter @tiktok-generator/backend db:generate",
+    "db:migrate": "pnpm --filter @tiktok-generator/backend db:migrate",
+    "db:push": "pnpm --filter @tiktok-generator/backend db:push",
+    "db:seed": "pnpm --filter @tiktok-generator/backend db:seed",
+    "db:studio": "pnpm --filter @tiktok-generator/backend db:studio",
+    "docker:dev": "docker-compose -f docker-compose.dev.yml up -d",
+    "docker:dev:down": "docker-compose -f docker-compose.dev.yml down",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f"
+  },
+  "keywords": [
+    "tiktok",
+    "content-generator",
+    "dropshipping",
+    "influencer",
+    "saas",
+    "arabic"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.0",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.18.0",
+    "@typescript-eslint/parser": "^6.18.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^3.2.0",
+    "typescript": "^5.3.3"
+  }
+}

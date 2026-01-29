@@ -1,0 +1,29 @@
+version: '3.8'
+
+# Development docker-compose - only runs MySQL
+# Frontend and Backend run locally with hot-reload
+
+services:
+  # MySQL Database for local development
+  mysql:
+    image: mysql:8.0
+    container_name: tiktok-generator-db-dev
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: tiktok_generator
+      MYSQL_USER: tiktok_user
+      MYSQL_PASSWORD: tiktok_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data_dev:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql_data_dev:
+    driver: local

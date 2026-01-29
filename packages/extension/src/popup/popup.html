@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TikTok Content Generator</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Loading State -->
+    <div id="loading-state" class="state">
+      <div class="spinner"></div>
+      <p>Loading...</p>
+    </div>
+
+    <!-- Login State -->
+    <div id="login-state" class="state hidden">
+      <div class="logo">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="url(#gradient)"/>
+          <defs>
+            <linearGradient id="gradient" x1="2" y1="2" x2="22" y2="22">
+              <stop offset="0%" stop-color="#6366f1"/>
+              <stop offset="100%" stop-color="#8b5cf6"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <h1>TikTok Content Generator</h1>
+      <p class="subtitle">Generate viral content for your products</p>
+      
+      <div class="login-form">
+        <input type="text" id="api-url" placeholder="API URL" value="http://localhost:3000/api/v1">
+        <input type="password" id="auth-token" placeholder="Paste your auth token">
+        <button id="login-btn" class="btn-primary">Login</button>
+      </div>
+      
+      <p class="help-text">
+        <a href="#" id="open-webapp-login">Open Web App</a> to get your auth token
+      </p>
+    </div>
+
+    <!-- Main State -->
+    <div id="main-state" class="state hidden">
+      <!-- Header -->
+      <div class="header">
+        <div class="user-info">
+          <div class="avatar" id="user-avatar">U</div>
+          <div class="user-details">
+            <span class="user-name" id="user-name">User</span>
+            <span class="user-plan" id="user-plan">Free Plan</span>
+          </div>
+        </div>
+        <button id="logout-btn" class="btn-icon" title="Logout">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Usage Stats -->
+      <div class="usage-card">
+        <div class="usage-header">
+          <span>Monthly Usage</span>
+          <span id="usage-text">0 / 10</span>
+        </div>
+        <div class="usage-bar">
+          <div class="usage-progress" id="usage-progress" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Site Info -->
+      <div class="site-info" id="site-info">
+        <div class="site-badge" id="site-badge">
+          <span class="site-icon">🌐</span>
+          <span class="site-name" id="site-name">Unknown Site</span>
+        </div>
+        <span class="product-status" id="product-status">No product detected</span>
+      </div>
+
+      <!-- Product Preview -->
+      <div class="product-preview hidden" id="product-preview">
+        <img id="product-image" src="" alt="Product">
+        <div class="product-info">
+          <h3 id="product-title">Product Title</h3>
+          <p id="product-price">$0.00</p>
+        </div>
+      </div>
+
+      <!-- Generation Form -->
+      <div class="generation-form hidden" id="generation-form">
+        <div class="form-group">
+          <label>Language</label>
+          <select id="language-select">
+            <option value="ar">العربية (Arabic)</option>
+            <option value="ar_eg">مصري (Egyptian)</option>
+            <option value="ar_sa">سعودي (Saudi)</option>
+            <option value="ar_ae">إماراتي (Emirati)</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Platform</label>
+          <select id="platform-select">
+            <option value="tiktok">TikTok</option>
+            <option value="instagram_reels">Instagram Reels</option>
+            <option value="youtube_shorts">YouTube Shorts</option>
+            <option value="facebook_reels">Facebook Reels</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Tone</label>
+          <select id="tone-select">
+            <option value="friendly">Friendly</option>
+            <option value="professional">Professional</option>
+            <option value="urgent">Urgent</option>
+            <option value="humorous">Humorous</option>
+            <option value="persuasive">Persuasive</option>
+          </select>
+        </div>
+
+        <button id="generate-btn" class="btn-primary btn-full">
+          <span class="btn-text">Generate Content</span>
+          <span class="btn-loading hidden">
+            <span class="spinner-small"></span>
+            Generating...
+          </span>
+        </button>
+      </div>
+
+      <!-- No Product Message -->
+      <div class="no-product" id="no-product">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+          <line x1="12" y1="22.08" x2="12" y2="12"/>
+        </svg>
+        <p>Navigate to a product page on AliExpress, Amazon, or other supported sites to extract product data.</p>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <a href="#" id="open-webapp">Open Web App</a>
+        <span>•</span>
+        <a href="#" id="open-settings">Settings</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js" type="module"></script>
+</body>
+</html>
